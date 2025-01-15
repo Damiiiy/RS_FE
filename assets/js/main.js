@@ -175,3 +175,64 @@
   document.addEventListener('scroll', navmenuScrollspy);
 
 })();
+
+
+//form registration
+  document.addEventListener('DOMContentLoaded', function() {
+    // Select the form element
+    const form = document.querySelector('.php-email-form');
+    
+    // Listen for form submission
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); // Prevent default form submission behavior
+
+      // Show the loading message
+      document.querySelector('.loading').style.display = 'block';
+      document.querySelector('.error-message').style.display = 'none';
+      document.querySelector('.sent-message').style.display = 'none';
+
+      // Collect the form data
+      const fullName = form.querySelector('input[name="full_name"]').value;
+      const email = form.querySelector('input[name="email"]').value;
+      const track = form.querySelector('select[name="track"]').value;
+
+      // Create a plain JavaScript object to hold the data
+      const formData = {
+        full_name: fullName,
+        email: email,
+        track: track
+      };
+
+      // Use the Fetch API to send the data to the backend
+      fetch('http://localhost:5000/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Indicate we're sending JSON data
+        },
+        body: JSON.stringify(formData), // Convert the formData object to a JSON string
+      })
+      .then(response => response.json())  // Assume the backend returns a JSON response
+      .then(data => {
+        // If form submission is successful
+        if (data.success) {
+          document.querySelector('.sent-message').style.display = 'block';
+          form.reset(); // Optionally reset the form after submission
+        } else {
+          // Show error message if something goes wrong
+          document.querySelector('.error-message').textContent = data.message;
+          document.querySelector('.error-message').style.display = 'block';
+        }
+      })
+      .catch(error => {
+        // If there's an error in the fetch process
+        console.error('Error:', error);
+        document.querySelector('.error-message').textContent = 'Something went wrong, please try again.';
+        document.querySelector('.error-message').style.display = 'block';
+      })
+      .finally(() => {
+        // Hide loading message
+        document.querySelector('.loading').style.display = 'none';
+      });
+    });
+  });
+
