@@ -178,7 +178,7 @@
 
 
 document.addEventListener('DOMContentLoaded', function() {
-  const form = document.querySelector('.php-email-form');
+  const form = document.querySelector('.php-reg-form');
 
   // Function to retrieve the CSRF token from cookies
   function getCSRFToken() {
