@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // Send the form data via Fetch API to the backend
-    fetch('https://rsbe.pythonanywhere.com/register-bootcamp/', {
+    fetch('https://rsbe.pythonanywhere.com/api/register-bootcamp/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
