@@ -177,22 +177,77 @@
 })();
 
 
-document.addEventListener('DOMContentLoaded', function() {
+// document.addEventListener('DOMContentLoaded', function() {
+//   const form = document.querySelector('.php-reg-form');
+
+//   // Function to retrieve the CSRF token from cookies
+//   function getCSRFToken() {
+//     const cookies = document.cookie.split(';');
+//     for (const cookie of cookies) {
+//       const [name, value] = cookie.trim().split('=');
+//       if (name === 'csrftoken') {
+//         return value;
+//       }
+//     }
+//     return null;
+//   }
+
+//   form.addEventListener('submit', function(e) {
+//     e.preventDefault(); // Prevent default form submission
+
+//     // Show loading message
+//     document.querySelector('.loading').style.display = 'block';
+//     document.querySelector('.error-message').style.display = 'none';
+//     document.querySelector('.sent-message').style.display = 'none';
+
+//     const fullName = form.querySelector('input[name="full_name"]').value;
+//     const email = form.querySelector('input[name="email"]').value;
+//     const track = form.querySelector('select[name="role"]').value;
+
+//     const formData = {
+//       full_name: fullName,
+//       email: email,
+//       role: track
+//     };
+
+//     // Get CSRF token
+//     const csrfToken = getCSRFToken();
+
+//     // Send the form data via Fetch API to the backend
+//     fetch('https://rsbe.pythonanywhere.com/register-bootcamp/', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         // 'X-CSRFToken': csrfToken // Add CSRF token to the headers
+//       },
+//       body: JSON.stringify(formData),
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//       if (data.success) {
+//         document.querySelector('.sent-message').style.display = 'block';
+//         form.reset();
+//       } else {
+//         document.querySelector('.error-message').textContent = data.message;
+//         document.querySelector('.error-message').style.display = 'block';
+//       }
+//     })
+//     .catch(error => {
+//       console.error('Error:', error);
+//       document.querySelector('.error-message').textContent = 'Something went wrong, please try again.';
+//       document.querySelector('.error-message').style.display = 'block';
+//     })
+//     .finally(() => {
+//       document.querySelector('.loading').style.display = 'none';
+//     });
+//   });
+// });
+
+
+document.addEventListener('DOMContentLoaded', function () {
   const form = document.querySelector('.php-reg-form');
 
-  // Function to retrieve the CSRF token from cookies
-  function getCSRFToken() {
-    const cookies = document.cookie.split(';');
-    for (const cookie of cookies) {
-      const [name, value] = cookie.trim().split('=');
-      if (name === 'csrftoken') {
-        return value;
-      }
-    }
-    return null;
-  }
-
-  form.addEventListener('submit', function(e) {
+  form.addEventListener('submit', function (e) {
     e.preventDefault(); // Prevent default form submission
 
     // Show loading message
@@ -200,48 +255,48 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.error-message').style.display = 'none';
     document.querySelector('.sent-message').style.display = 'none';
 
-    const fullName = form.querySelector('input[name="full_name"]').value;
-    const email = form.querySelector('input[name="email"]').value;
-    const track = form.querySelector('select[name="role"]').value;
-
     const formData = {
-      full_name: fullName,
-      email: email,
-      role: track
+      full_name: form.querySelector('input[name="full_name"]').value,
+      email: form.querySelector('input[name="email"]').value,
+      role: form.querySelector('select[name="role"]').value,
     };
-
-    // Get CSRF token
-    const csrfToken = getCSRFToken();
 
     // Send the form data via Fetch API to the backend
     fetch('https://rsbe.pythonanywhere.com/register-bootcamp/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': csrfToken // Add CSRF token to the headers
       },
       body: JSON.stringify(formData),
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        document.querySelector('.sent-message').style.display = 'block';
-        form.reset();
-      } else {
-        document.querySelector('.error-message').textContent = data.message;
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.success) {
+          document.querySelector('.sent-message').style.display = 'block';
+          form.reset();
+        } else {
+          const errorMsg = data.message || 'Something went wrong.';
+          document.querySelector('.error-message').textContent = errorMsg;
+          document.querySelector('.error-message').style.display = 'block';
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.querySelector('.error-message').textContent =
+          'Network error or server issue. Please try again.';
         document.querySelector('.error-message').style.display = 'block';
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      document.querySelector('.error-message').textContent = 'Something went wrong, please try again.';
-      document.querySelector('.error-message').style.display = 'block';
-    })
-    .finally(() => {
-      document.querySelector('.loading').style.display = 'none';
-    });
+      })
+      .finally(() => {
+        document.querySelector('.loading').style.display = 'none';
+      });
   });
 });
+
 
 
 // document.addEventListener('DOMContentLoaded', function() {
