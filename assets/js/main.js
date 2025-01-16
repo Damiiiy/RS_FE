@@ -175,6 +175,7 @@
   document.addEventListener('scroll', navmenuScrollspy);
 
 })();
+
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.querySelector('.php-email-form');
 
